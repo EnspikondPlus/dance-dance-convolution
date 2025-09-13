@@ -77,7 +77,7 @@ def calculate():
     pose_points = data.get("pose")
     track_points = data.get("track")
     score = data.get("score")
-    output_score = pipeline_similarity(pose_points, track_points, score)
+    output_score = pipeline_similarity(pose_points, track_points)
     resp = jsonify({"score": output_score})
     return corsify_response(resp)
 

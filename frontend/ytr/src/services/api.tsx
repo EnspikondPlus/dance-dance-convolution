@@ -34,11 +34,11 @@ export async function sendTrackFlask(image: string) {
   return res.json();
 }
 
-export async function calculateScores(pose: any, track: any, score: any) {
+export async function calculateScores(pose: any, track: any) {
   const res = await fetch("http://127.0.0.1:5000/api/calculate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pose, track, score }), // <-- must match backend key
+    body: JSON.stringify({ pose, track}), // <-- must match backend key
   });
   return res.json();
 }

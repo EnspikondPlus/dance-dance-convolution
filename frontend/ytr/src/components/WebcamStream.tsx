@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import { sendFrameFlask, sendTrackFlask, calculateScores } from "../services/api"
+import { sendFrameFlask, sendTrackFlask, calculateScores } from "../services/api";
+import confetti from "canvas-confetti";
 
 export default function WebcamStream() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -16,7 +17,10 @@ export default function WebcamStream() {
   const [poseLandmarks, setPoseLandmarks] = useState<any>(null);
   const [trackLandmarks, setTrackLandmarks] = useState<any>(null);
 
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0.0);
+  const [possible, setPossible] = useState(0.0);
+
+  const [showResults, setShowResults] = useState(false);
   // Start webcam
   const startWebcam = async () => {
     try {
@@ -54,7 +58,7 @@ export default function WebcamStream() {
     else startWebcam();
   };
 
-   const startTrack = () => {
+  const startTrack = () => {
     if (trackRef.current) {
       trackRef.current.src = "http://127.0.0.1:5000/api/video";
       trackRef.current.play().catch((err) => console.error(err));
@@ -72,16 +76,19 @@ export default function WebcamStream() {
   };
 
   const toggleTrack = () => {
-    if ((!isTrackOn) && isOn){
+    if ((!isTrackOn) && isOn) {
       startTrack();
       setScore(0);
+      setPossible(0);
     }
     else stopTrack();
   };
 
-  const calculateScore = async () => {
-    const newscore = await calculateScores(poseLandmarks, trackLandmarks, score);
-    setScore(newscore);
+  const calculateScore = async (latestTrackLandmarks?: any) => {
+    const track = latestTrackLandmarks || trackLandmarks;
+    const newscore = await calculateScores(poseLandmarks, track);
+    setScore(score => score + newscore.score);
+    setPossible(possible => possible + 1.0);
   }
 
   // Capture a frame and POST to backend
@@ -104,8 +111,7 @@ export default function WebcamStream() {
     try {
       const response = await sendFrameFlask(dataUrl);
       setPoseImage(response.image);
-      setPoseLandmarks(response.poseLandmarks);
-      console.log(poseLandmarks);
+      setPoseLandmarks(response.landmarks);
     } catch (err) {
       console.error("Failed to send frame:", err);
     }
@@ -131,12 +137,10 @@ export default function WebcamStream() {
       const response = await sendTrackFlask(dataUrl);
       setTrackImage(response.image);
       setTrackLandmarks(response.landmarks);
-      console.log(trackLandmarks);
+      calculateScore(response.landmarks);
     } catch (err) {
       console.error("Failed to send frame:", err);
     }
-
-    calculateScore();
   };
 
   // Periodically send frames while webcam is on
@@ -146,7 +150,7 @@ export default function WebcamStream() {
     const interval = setInterval(sendFrame, 150); // every 500ms
     return () => clearInterval(interval);
   }, [isOn]);
-  
+
   useEffect(() => {
     if ((!isOn) || (!isTrackOn)) return;
     const interval = setInterval(sendFrame, 150);
@@ -172,7 +176,24 @@ export default function WebcamStream() {
     };
   }, [stream]);
 
-    return (
+  useEffect(() => {
+    const trackVideo = trackRef.current;
+    if (!trackVideo) return;
+
+    const handleEnded = () => {
+      console.log("Track video has ended!");
+      setIsTrackOn(false); // optional: automatically stop tracking
+    };
+
+    trackVideo.addEventListener("ended", handleEnded);
+
+    // Cleanup
+    return () => {
+      trackVideo.removeEventListener("ended", handleEnded);
+    };
+  }, [trackRef.current]);
+
+  return (
     <div style={{ textAlign: "center" }}>
       {error && <p>{error}</p>}
 
@@ -184,7 +205,7 @@ export default function WebcamStream() {
         {isTrackOn ? "Stop Track" : "Start Track"}
       </button>
 
-      <p><b>Score:</b> {score * 100}</p>
+      <p><b>Score:</b> {score.toFixed(1)} / {possible.toFixed(0)}</p>
 
       <br />
 
@@ -226,6 +247,30 @@ export default function WebcamStream() {
             marginLeft: "20px",
           }}
         />
+      )}
+      {showResults && (
+        <div style={{
+          position: "fixed",
+          top: 0, left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.6)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999
+        }}>
+          <div style={{
+            background: "#fff",
+            padding: "30px",
+            borderRadius: "12px",
+            textAlign: "center"
+          }}>
+            <h2>Results!</h2>
+            <p><b>Score:</b> {score.toFixed(1)} / {possible.toFixed(0)}</p>
+            <button onClick={() => setShowResults(false)}>Close</button>
+          </div>
+        </div>
       )}
     </div>
   );
