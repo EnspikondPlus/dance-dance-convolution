@@ -1,0 +1,145 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #2c3e50;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.header-left {
+  display: flex; 
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header-left img {
+  width: 32px;
+  height: 32px;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.header-right a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #ecf0f1;
+  font-weight: bold;
+}
+
+.header-right a:hover {
+  color: #1abc9c;
+}
+
+.fly-in{
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeFlyIn 1.5s ease-out forwards;
+}
+
+@keyframes fadeFlyIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+input[type="text"] {
+  width: 300px;
+  padding: 10px 14px;
+  border: 2px solid #2c3e50;  /* matches header base color */
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #ecf0f1;   /* light gray background */
+  color: #2c3e50;             /* dark text */
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #1abc9c;      /* teal accent on focus */
+  box-shadow: 0 0 6px rgba(26, 188, 156, 0.6);
+  background-color: #fff;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #2c3e50;   /* dark base (matches header) */
+  color: #ecf0f1;              /* light text */
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #1abc9c;   /* teal on hover */
+  color: #fff;
+  transform: translateY(-2px); /* slight lift effect */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button:active {
+  transform: translateY(0);    /* press down effect */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.first-block {
+  padding-top: 50px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.imgflip {
+  transform: scaleX(-1);
+}
+
+.error {
+  display: flex;
+  flex-direction: row;    
+  justify-content: center;   
+  align-items: center;    
+  gap: 10px;       
+  padding-top: 20px      
+}
+
+.spinner { 
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ecf0f1;
+  border-top: 4px solid #1abc9c; 
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0;              
+}

@@ -1,0 +1,120 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+lib/
+include/
+bin/
+*.egg
+*.egg-info
+.installed.cfg
+*.whl
+dist/
+build/
+
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# MyPy
+.mypy_cache/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Virtual environment files
+*.env
+.venv/
+
+# Dependency directories
+node_modules/
+
+# Optional: Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Optional: Build artifacts
+dist/
+build/
+out/
+
+# Optional: Editor and IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional: Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build/Distribution directories
+build/
+dist/
+out/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Local environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE-specific files (e.g., VS Code)
+.vscode/
+
+# Other temporary files
+tmp/
+*.tmp
+*.swp
+
+landmarks/
+tracks/
